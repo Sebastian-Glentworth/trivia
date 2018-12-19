@@ -49,7 +49,21 @@ namespace Trivia.Tests.Integration
                 gold = reader.ReadToEnd();
             }
 
-            Assert.True(gold == currentOut);
+            if(gold == currentOut)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                var lineArray = currentOut?.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                var goldLineArray = gold.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                for (int i = 0; i < goldLineArray.Length; i++)
+                {
+                    Assert.AreEqual(lineArray[i], goldLineArray[i], $"Line {i} differs between gold and master{Environment.NewLine}" +
+                        $"Gold: {goldLineArray[i]}{Environment.NewLine}" +
+                        $"Current: {lineArray[i]}");
+                }
+            }
         }
     }
 }
